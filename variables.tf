@@ -25,9 +25,9 @@ variable "service_memory" {
   type        = number
 }
 
-variable "service_listener" {
+variable "service_listener_arn" {
   description = "The listener rule for the service"
-  type        = map(string)
+  type        = string
 }
 
 #### NETWORK CONFIGURATION ####
@@ -39,5 +39,5 @@ variable "vpc_id" {
 
 variable "private_subnets" {
   description = "The SSM parameter name for the private subnet 1"
-  type        = string
+  type        = list(string)
 }
