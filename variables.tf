@@ -30,6 +30,11 @@ variable "service_listener_arn" {
   type        = string
 }
 
+variable "service_task_execution_role_arn" {
+  description = "The task execution role for the service"
+  type        = string
+}
+
 #### NETWORK CONFIGURATION ####
 
 variable "vpc_id" {
