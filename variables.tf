@@ -1,3 +1,22 @@
+#### GENERAL CONFIGURATION ####
+
+variable "region" {
+  description = "The region where the resources will be created"
+  type        = string
+}
+
+#### NETWORK CONFIGURATION ####
+
+variable "vpc_id" {
+  description = "The SSM parameter name for the VPC ID"
+  type        = string
+}
+
+variable "private_subnets" {
+  description = "The SSM parameter name for the private subnet 1"
+  type        = list(string)
+}
+
 #### ECS APP CONFIGURATION ####
 
 variable "service_name" {
@@ -35,14 +54,17 @@ variable "service_task_execution_role_arn" {
   type        = string
 }
 
-#### NETWORK CONFIGURATION ####
+#### ECS TASK DEFINITION ####
 
-variable "vpc_id" {
-  description = "The SSM parameter name for the VPC ID"
-  type        = string
+variable "environment_variables" {
+  description = "The environment variables for the task definition"
+  type = list(object({
+    name  = string
+    value = string
+  }))
 }
 
-variable "private_subnets" {
-  description = "The SSM parameter name for the private subnet 1"
+variable "capabilities" {
+  description = "The capabilities for the task definition"
   type        = list(string)
 }
