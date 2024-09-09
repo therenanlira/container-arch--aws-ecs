@@ -54,6 +54,11 @@ variable "service_task_execution_role_arn" {
   type        = string
 }
 
+variable "service_healthcheck" {
+  description = "The healthcheck for the service"
+  type        = map(string)
+}
+
 #### ECS TASK DEFINITION ####
 
 variable "environment_variables" {
