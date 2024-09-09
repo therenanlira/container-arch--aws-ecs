@@ -2,7 +2,7 @@ locals {
   td_resource_name = "task-def"
 }
 
-resource "aws_ecs_task_definition" "task_definition" {
+resource "aws_ecs_task_definition" "ecs_task_definition" {
   family = "${var.cluster_name}--${var.service_name}--${local.td_resource_name}"
 
   network_mode             = "awsvpc"
