@@ -88,3 +88,20 @@ variable "capabilities" {
   description = "The capabilities for the task definition"
   type        = list(string)
 }
+
+#### ECS AUTO SCALING ####
+
+variable "scale_type" {
+  description = "The scale type for the task definition"
+  type        = string
+}
+
+variable "task_minimum" {
+  description = "The minimum number of tasks to run"
+  type        = number
+}
+
+variable "task_maximum" {
+  description = "The maximum number of tasks to run"
+  type        = number
+}
