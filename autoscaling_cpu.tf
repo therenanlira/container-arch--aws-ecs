@@ -1,10 +1,13 @@
 locals {
-  cpu_appautoscaling_resource_name = "ecs-cpu"
+  cpu_out_resource_name           = "cpu-scale-out"
+  cpu_in_resource_name            = "cpu-scale-in"
+  cpu_tracking_resource_name      = "cpu-scale-tracking"
+  requests_tracking_resource_name = "requests-scale-tracking"
 }
 
 resource "aws_appautoscaling_policy" "ecs_cpu_scale_out" {
-  count = var.scale_type == "CPU" ? 1 : 0
-  name  = "${var.cluster_name}--${var.service_name}--${local.cpu_appautoscaling_resource_name}--scale-out-policy"
+  count = var.scale_type == "cpu" ? 1 : 0
+  name  = "${var.cluster_name}--${var.service_name}--${local.cpu_out_resource_name}--policy"
 
   resource_id        = aws_appautoscaling_target.ecs_target.resource_id
   service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
@@ -25,9 +28,9 @@ resource "aws_appautoscaling_policy" "ecs_cpu_scale_out" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "ecs_cpu_scale_out_alarm" {
-  count = var.scale_type == "CPU" ? 1 : 0
+  count = var.scale_type == "cpu" ? 1 : 0
 
-  alarm_name        = "${var.cluster_name}--${var.service_name}--${local.cpu_appautoscaling_resource_name}--scale-out-alarm"
+  alarm_name        = "${var.cluster_name}--${var.service_name}--${local.cpu_out_resource_name}--alarm"
   alarm_description = "Scale out when CPU exceeds ${var.scale_out_cpu_threshold}%"
 
   comparison_operator = var.scale_out_comparison_operator
@@ -48,8 +51,8 @@ resource "aws_cloudwatch_metric_alarm" "ecs_cpu_scale_out_alarm" {
 }
 
 resource "aws_appautoscaling_policy" "ecs_cpu_scale_in" {
-  count = var.scale_type == "CPU" ? 1 : 0
-  name  = "${var.cluster_name}--${var.service_name}--${local.cpu_appautoscaling_resource_name}--scale-in-policy"
+  count = var.scale_type == "cpu" ? 1 : 0
+  name  = "${var.cluster_name}--${var.service_name}--${local.cpu_in_resource_name}--policy"
 
   resource_id        = aws_appautoscaling_target.ecs_target.resource_id
   service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
@@ -82,9 +85,9 @@ resource "aws_appautoscaling_policy" "ecs_cpu_scale_in" {
 
 
 resource "aws_cloudwatch_metric_alarm" "ecs_cpu_scale_in_alarm" {
-  count = var.scale_type == "CPU" ? 1 : 0
+  count = var.scale_type == "cpu" ? 1 : 0
 
-  alarm_name        = "${var.cluster_name}--${var.service_name}--${local.cpu_appautoscaling_resource_name}--scale-in-alarm"
+  alarm_name        = "${var.cluster_name}--${var.service_name}--${local.cpu_in_resource_name}--alarm"
   alarm_description = "Scale in when CPU exceeds ${var.scale_in_cpu_threshold}%"
 
   comparison_operator = var.scale_in_comparison_operator
@@ -102,4 +105,47 @@ resource "aws_cloudwatch_metric_alarm" "ecs_cpu_scale_in_alarm" {
   }
 
   alarm_actions = [aws_appautoscaling_policy.ecs_cpu_scale_in[count.index].arn]
+}
+
+resource "aws_appautoscaling_policy" "ecs_target_cpu_tracking" {
+  count = var.scale_type == "cpu_tracking" ? 1 : 0
+  name  = "${var.cluster_name}--${var.service_name}--${local.cpu_tracking_resource_name}--policy"
+
+  resource_id        = aws_appautoscaling_target.ecs_target.resource_id
+  service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
+  scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
+
+  policy_type = "TargetTrackingScaling"
+
+  target_tracking_scaling_policy_configuration {
+    target_value       = var.scale_cpu_tracking
+    scale_in_cooldown  = var.scale_in_cooldown
+    scale_out_cooldown = var.scale_out_cooldown
+
+    predefined_metric_specification {
+      predefined_metric_type = "ECSServiceAverageCPUUtilization"
+    }
+  }
+}
+
+resource "aws_appautoscaling_policy" "ecs_target_requests_tracking" {
+  count = var.scale_type == "requests_tracking" ? 1 : 0
+  name  = "${var.cluster_name}--${var.service_name}--${local.requests_tracking_resource_name}--policy"
+
+  resource_id        = aws_appautoscaling_target.ecs_target.resource_id
+  service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
+  scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
+
+  policy_type = "TargetTrackingScaling"
+
+  target_tracking_scaling_policy_configuration {
+    target_value       = var.scale_cpu_tracking
+    scale_in_cooldown  = var.scale_in_cooldown
+    scale_out_cooldown = var.scale_out_cooldown
+
+    predefined_metric_specification {
+      predefined_metric_type = "ALBRequestCountPerTarget"
+      resource_label         = "${data.aws_alb.alb_arn.arn_suffix}/${aws_lb_target_group.ecs_target_group.arn_suffix}"
+    }
+  }
 }

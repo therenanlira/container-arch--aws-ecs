@@ -19,13 +19,13 @@ variable "private_subnets" {
 
 #### ECS APP CONFIGURATION ####
 
-variable "service_name" {
-  description = "The name of the ECS service"
+variable "cluster_name" {
+  description = "The name of the ECS cluster"
   type        = string
 }
 
-variable "cluster_name" {
-  description = "The name of the ECS cluster"
+variable "service_name" {
+  description = "The name of the ECS service"
   type        = string
 }
 
@@ -72,6 +72,11 @@ variable "service_task_count" {
 variable "service_hosts" {
   description = "The hosts for the service"
   type        = list(string)
+}
+
+variable "alb_arn" {
+  description = "The ARN of the ALB"
+  type        = string
 }
 
 #### ECS TASK DEFINITION ####
@@ -173,5 +178,15 @@ variable "scale_in_evaluation_periods" {
 
 variable "scale_in_cooldown" {
   description = "The cooldown for scaling in"
+  type        = number
+}
+
+variable "scale_cpu_tracking" {
+  description = "The name of the CPU tracking resource"
+  type        = number
+}
+
+variable "scale_requests_tracking" {
+  description = "The name of the requests tracking resource"
   type        = number
 }
