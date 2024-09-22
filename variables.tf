@@ -74,11 +74,6 @@ variable "service_hosts" {
   type        = list(string)
 }
 
-variable "alb_arn" {
-  description = "The ARN of the ALB"
-  type        = string
-}
-
 #### ECS TASK DEFINITION ####
 
 variable "environment_variables" {
@@ -111,82 +106,104 @@ variable "task_maximum" {
   type        = number
 }
 
+variable "alb_arn" {
+  description = "The ARN of the ALB"
+  type        = string
+  default     = null
+}
+
 variable "scale_out_cpu_threshold" {
   description = "The CPU threshold for scaling out"
   type        = number
+  default     = 50
 }
 
 variable "scale_out_adjustment" {
   description = "The number of tasks to add when scaling out"
   type        = number
+  default     = 1
 }
 
 variable "scale_out_comparison_operator" {
   description = "The comparison operator for scaling out"
   type        = string
+  default     = "GreaterThanOrEqualToThreshold"
 }
 
 variable "scale_out_statistic" {
   description = "The statistic for scaling out"
   type        = string
+  default     = "Average"
 }
 
 variable "scale_out_period" {
   description = "The period for scaling out"
   type        = number
+  default     = 30
 }
 
 variable "scale_out_evaluation_periods" {
   description = "The evaluation periods for scaling out"
   type        = number
+  default     = 2
 }
 
 variable "scale_out_cooldown" {
   description = "The cooldown for scaling out"
   type        = number
+  default     = 30
 }
 
 variable "scale_in_cpu_threshold" {
   description = "The CPU threshold for scaling in"
   type        = number
+  default     = 30
 }
 
 variable "scale_in_adjustment" {
   description = "The number of tasks to add when scaling in"
   type        = number
+  default     = -1
 }
 
 variable "scale_in_comparison_operator" {
   description = "The comparison operator for scaling in"
   type        = string
+  default     = "LessThanOrEqualToThreshold"
 }
 
 variable "scale_in_statistic" {
   description = "The statistic for scaling in"
   type        = string
+  default     = "Average"
 }
 
 variable "scale_in_period" {
   description = "The period for scaling in"
   type        = number
+  default     = 60
 }
 
 variable "scale_in_evaluation_periods" {
   description = "The evaluation periods for scaling in"
   type        = number
+  default     = 2
 }
 
 variable "scale_in_cooldown" {
   description = "The cooldown for scaling in"
   type        = number
+  default     = 60
 }
 
 variable "scale_cpu_tracking" {
   description = "The name of the CPU tracking resource"
   type        = number
+  default     = 50
 }
 
 variable "scale_requests_tracking" {
   description = "The name of the requests tracking resource"
   type        = number
+  default     = 30
 }
