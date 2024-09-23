@@ -1,9 +1,9 @@
 locals {
-  td_resource_name = "task-def"
+  taskdef_resource_name = "task-def"
 }
 
 resource "aws_ecs_task_definition" "ecs_task_definition" {
-  family = "${var.cluster_name}--${var.service_name}--${local.td_resource_name}"
+  family = "${var.cluster_name}--${var.service_name}--${local.taskdef_resource_name}"
 
   network_mode             = "awsvpc"
   requires_compatibilities = var.capabilities
@@ -43,7 +43,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
   ])
 
   tags = {
-    Name     = "${var.service_name}--${local.td_resource_name}"
+    Name     = "${var.service_name}--${local.taskdef_resource_name}"
     Resource = "task-definition"
   }
 }
