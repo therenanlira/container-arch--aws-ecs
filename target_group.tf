@@ -3,7 +3,7 @@ locals {
 }
 
 resource "aws_lb_target_group" "ecs_target_group" {
-  name = "${var.cluster_name}--${local.target_group_resource_name}"
+  name = substr("${var.cluster_name}--${local.target_group_resource_name}", 0, 32)
 
   vpc_id      = var.vpc_id
   port        = var.service_port
@@ -25,7 +25,7 @@ resource "aws_lb_target_group" "ecs_target_group" {
   }
 
   tags = {
-    Name     = "${var.cluster_name}--${local.target_group_resource_name}"
+    Name     = substr("${var.cluster_name}--${local.target_group_resource_name}", 0, 32)
     Resource = "ecs-target-group"
   }
 }

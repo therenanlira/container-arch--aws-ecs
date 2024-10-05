@@ -16,7 +16,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
   container_definitions = jsonencode([
     {
       name        = var.service_name
-      image       = aws_ecr_repository.ecr_repository.repository_url
+      image       = var.container_image
       cpu         = var.service_cpu
       memory      = var.service_memory
       essential   = true
