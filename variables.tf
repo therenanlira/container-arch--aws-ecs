@@ -221,3 +221,15 @@ variable "scale_requests_tracking" {
   type        = number
   default     = 30
 }
+
+variable "efs_volumes" {
+  description = "The EFS volumes for the task definition"
+  type = list(object({
+    volume_name      = string
+    file_system_id   = string
+    file_system_root = string
+    mount_point      = string
+    read_only        = bool
+  }))
+  default = []
+}
