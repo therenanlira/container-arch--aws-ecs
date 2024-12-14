@@ -17,7 +17,8 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
     for_each = var.efs_volumes
 
     content {
-      name = volume.value.volume_name
+      configure_at_launch = false
+      name                = volume.value.volume_name
 
       efs_volume_configuration {
         file_system_id          = volume.value.file_system_id
@@ -36,6 +37,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
       memory      = var.service_memory
       essential   = true
       environment = var.environment_variables
+      secrets     = var.secrets
 
       portMappings = [
         {

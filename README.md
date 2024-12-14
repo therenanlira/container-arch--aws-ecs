@@ -64,6 +64,7 @@ No modules.
 | <a name="input_scale_out_statistic"></a> [scale\_out\_statistic](#input\_scale\_out\_statistic) | The statistic for scaling out | `string` | `"Average"` | no |
 | <a name="input_scale_requests_tracking"></a> [scale\_requests\_tracking](#input\_scale\_requests\_tracking) | The name of the requests tracking resource | `number` | `30` | no |
 | <a name="input_scale_type"></a> [scale\_type](#input\_scale\_type) | The scale type for the task definition | `string` | n/a | yes |
+| <a name="input_secrets"></a> [secrets](#input\_secrets) | Secret Manager or Parameter Store list of secrets | <pre>list(object({<br/>    name      = string<br/>    valueFrom = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_service_cpu"></a> [service\_cpu](#input\_service\_cpu) | The number of CPU units to reserve for the service | `number` | n/a | yes |
 | <a name="input_service_healthcheck"></a> [service\_healthcheck](#input\_service\_healthcheck) | The healthcheck for the service | `map(string)` | n/a | yes |
 | <a name="input_service_hosts"></a> [service\_hosts](#input\_service\_hosts) | The hosts for the service | `list(string)` | n/a | yes |
